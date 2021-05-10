@@ -2,10 +2,40 @@ import tensorflow_addons as tfa
 import tensorflow as tf
 
 
+class TemporalGating(tf.keras.layers.Layer):
+    def __init__(self):
+        super(TemporalGating, self).__init__()
+        self.pooling = tf.keras.layers.GlobalAveragePooling1D()
+        self.dense_1 = None
+        self.dense_2 = None
+
+
+def call(self, inputs):
+    x = self.pooling(inputs)
+    x = tf.keras.layers.Reshape((1, inputs.shape[-1]))(x)
+    if not self.dense_1:
+        self.dense_1 = tf.keras.layers.Dense(
+            inputs.shape[-1] // 16,
+            activation="relu",
+            kernel_initializer="he_normal",
+            use_bias=False,
+        )
+    x = self.dense_1(x)
+    if not self.dense_2:
+        self.dense_2 = tf.keras.layers.Dense(
+            inputs.shape[-1],
+            activation="sigmoid",
+            kernel_initializer="he_normal",
+            use_bias=False,
+        )
+    x = self.dense_2(x)
+    x = tf.keras.layers.Multiply()([inputs, x])
+    return x
+
+
 class Wav2Spk(tf.keras.models.Model):
     def __init__(self):
         super(Wav2Spk, self).__init__()
-
         # Encoder
         self.conv_1 = tf.keras.layers.Conv1D(
             40, kernel_size=10, strides=5, padding="same"
@@ -76,7 +106,7 @@ class Wav2Spk(tf.keras.models.Model):
             512, kernel_size=3, strides=1, padding="same", activation=tf.nn.relu
         )
 
-        self.gating = tf.keras.layers.Dense(1, activation=tf.nn.sigmoid)
+        self.gating = TemporalGating()
 
         # This will be chagned to Statics pooling layer in a future.
         self.pooling = tf.keras.layers.GlobalAveragePooling1D()
@@ -84,7 +114,7 @@ class Wav2Spk(tf.keras.models.Model):
         # Utt.Layers
         self.dense_10 = tf.keras.layers.Dense(512, activation=tf.nn.relu)
         self.dense_11 = tf.keras.layers.Dense(128, activation=tf.nn.relu)
-        self.dense_12 = tf.keras.layers.Dense(2, activation=tf.nn.softmax)
+        self.dense_12 = tf.keras.layers.Dense(10, activation=tf.nn.softmax)
 
     def call(self, inputs, training=False):
         x = self.conv_1(inputs)
@@ -106,9 +136,7 @@ class Wav2Spk(tf.keras.models.Model):
         x = self.conv_5(x)
         x = self.norm_5(x)
 
-        # x = self.encoder(inputs)
-        weight = self.gating(x)
-        x = tf.keras.layers.Multiply()([x, weight])
+        x = self.gating(x)
 
         x = self.conv_6(x)
         x = self.conv_7(x)
@@ -119,6 +147,5 @@ class Wav2Spk(tf.keras.models.Model):
 
         x = self.dense_10(x)
         x = self.dense_11(x)
-        return self.dense_12(x)
 
-        # x = self.utt_layers(x)
+        return self.dense_12(x)
