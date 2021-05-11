@@ -41,7 +41,7 @@ class Wav2Spk(tf.keras.models.Model):
             40, kernel_size=10, strides=5, padding="same"
         )
         self.norm_1 = tfa.layers.InstanceNormalization(
-            axis=1,
+            axis=-1,
             center=True,
             scale=True,
             beta_initializer="random_uniform",
@@ -52,7 +52,7 @@ class Wav2Spk(tf.keras.models.Model):
             200, kernel_size=5, strides=4, padding="same"
         )
         self.norm_2 = tfa.layers.InstanceNormalization(
-            axis=1,
+            axis=-1,
             center=True,
             scale=True,
             beta_initializer="random_uniform",
@@ -63,7 +63,7 @@ class Wav2Spk(tf.keras.models.Model):
             300, kernel_size=5, strides=2, padding="same"
         )
         self.norm_3 = tfa.layers.InstanceNormalization(
-            axis=1,
+            axis=-1,
             center=True,
             scale=True,
             beta_initializer="random_uniform",
@@ -74,7 +74,7 @@ class Wav2Spk(tf.keras.models.Model):
             512, kernel_size=3, strides=2, padding="same"
         )
         self.norm_4 = tfa.layers.InstanceNormalization(
-            axis=1,
+            axis=-1,
             center=True,
             scale=True,
             beta_initializer="random_uniform",
@@ -85,7 +85,7 @@ class Wav2Spk(tf.keras.models.Model):
             512, kernel_size=3, strides=2, padding="same"
         )
         self.norm_5 = tfa.layers.InstanceNormalization(
-            axis=1,
+            axis=-1,
             center=True,
             scale=True,
             beta_initializer="random_uniform",
