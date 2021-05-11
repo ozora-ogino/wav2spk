@@ -38,7 +38,9 @@ class Wav2Spk(tf.keras.models.Model):
         super(Wav2Spk, self).__init__()
         # Encoder
         self.conv_1 = tf.keras.layers.Conv1D(
-            40, kernel_size=10, strides=5, padding="same"
+            40,
+            kernel_size=10,
+            strides=5,
         )
         self.norm_1 = tfa.layers.InstanceNormalization(
             axis=-1,
@@ -49,7 +51,9 @@ class Wav2Spk(tf.keras.models.Model):
         )
         self.relu_1 = tf.keras.layers.ReLU()
         self.conv_2 = tf.keras.layers.Conv1D(
-            200, kernel_size=5, strides=4, padding="same"
+            200,
+            kernel_size=5,
+            strides=4,
         )
         self.norm_2 = tfa.layers.InstanceNormalization(
             axis=-1,
@@ -60,7 +64,9 @@ class Wav2Spk(tf.keras.models.Model):
         )
         self.relu_2 = tf.keras.layers.ReLU()
         self.conv_3 = tf.keras.layers.Conv1D(
-            300, kernel_size=5, strides=2, padding="same"
+            300,
+            kernel_size=5,
+            strides=2,
         )
         self.norm_3 = tfa.layers.InstanceNormalization(
             axis=-1,
@@ -71,7 +77,9 @@ class Wav2Spk(tf.keras.models.Model):
         )
         self.relu_3 = tf.keras.layers.ReLU()
         self.conv_4 = tf.keras.layers.Conv1D(
-            512, kernel_size=3, strides=2, padding="same"
+            512,
+            kernel_size=3,
+            strides=2,
         )
         self.norm_4 = tfa.layers.InstanceNormalization(
             axis=-1,
@@ -82,7 +90,9 @@ class Wav2Spk(tf.keras.models.Model):
         )
         self.relu_4 = tf.keras.layers.ReLU()
         self.conv_5 = tf.keras.layers.Conv1D(
-            512, kernel_size=3, strides=2, padding="same"
+            512,
+            kernel_size=3,
+            strides=2,
         )
         self.norm_5 = tfa.layers.InstanceNormalization(
             axis=-1,
@@ -94,16 +104,16 @@ class Wav2Spk(tf.keras.models.Model):
 
         # Frames Aggregator
         self.conv_6 = tf.keras.layers.Conv1D(
-            512, kernel_size=3, strides=1, padding="same", activation=tf.nn.relu
+            512, kernel_size=3, strides=1, activation=tf.nn.relu
         )
         self.conv_7 = tf.keras.layers.Conv1D(
-            512, kernel_size=3, strides=1, padding="same", activation=tf.nn.relu
+            512, kernel_size=3, strides=1, activation=tf.nn.relu
         )
         self.conv_8 = tf.keras.layers.Conv1D(
-            512, kernel_size=3, strides=1, padding="same", activation=tf.nn.relu
+            512, kernel_size=3, strides=1, activation=tf.nn.relu
         )
         self.conv_9 = tf.keras.layers.Conv1D(
-            512, kernel_size=3, strides=1, padding="same", activation=tf.nn.relu
+            512, kernel_size=3, strides=1, activation=tf.nn.relu
         )
 
         self.gating = TemporalGating()
