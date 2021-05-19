@@ -10,27 +10,27 @@ class TemporalGating(tf.keras.layers.Layer):
         self.dense_2 = None
 
 
-def call(self, inputs):
-    x = self.pooling(inputs)
-    x = tf.keras.layers.Reshape((1, inputs.shape[-1]))(x)
-    if not self.dense_1:
-        self.dense_1 = tf.keras.layers.Dense(
-            inputs.shape[-1] // 16,
-            activation="relu",
-            kernel_initializer="he_normal",
-            use_bias=False,
-        )
-    x = self.dense_1(x)
-    if not self.dense_2:
-        self.dense_2 = tf.keras.layers.Dense(
-            inputs.shape[-1],
-            activation="sigmoid",
-            kernel_initializer="he_normal",
-            use_bias=False,
-        )
-    x = self.dense_2(x)
-    x = tf.keras.layers.Multiply()([inputs, x])
-    return x
+    def call(self, inputs):
+        x = self.pooling(inputs)
+        x = tf.keras.layers.Reshape((1, inputs.shape[-1]))(x)
+        if not self.dense_1:
+            self.dense_1 = tf.keras.layers.Dense(
+                inputs.shape[-1] // 16,
+                activation="relu",
+                kernel_initializer="he_normal",
+                use_bias=False,
+            )
+        x = self.dense_1(x)
+        if not self.dense_2:
+            self.dense_2 = tf.keras.layers.Dense(
+                inputs.shape[-1],
+                activation="sigmoid",
+                kernel_initializer="he_normal",
+                use_bias=False,
+            )
+        x = self.dense_2(x)
+        x = tf.keras.layers.Multiply()([inputs, x])
+        return x
 
 
 class Wav2Spk(tf.keras.models.Model):
